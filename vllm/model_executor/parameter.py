@@ -273,6 +273,7 @@ class PerTensorScaleParameter(BasevLLMParameter):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.needs_scalar_to_array = True
 
     # For row parallel layers, no sharding needed
     # load weight into parameter as is
