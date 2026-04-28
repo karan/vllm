@@ -273,6 +273,9 @@ class PerTensorScaleParameter(BasevLLMParameter):
 
     needs_scalar_to_array: bool = True
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
     # For row parallel layers, no sharding needed
     # load weight into parameter as is
     def load_row_parallel_weight(self, *args, **kwargs):
@@ -604,8 +607,8 @@ def _adjust_shard_indexes_for_marlin(shard_size, shard_offset, marlin_tile_size)
 def _adjust_shard_indexes_for_packing(
     shard_size, shard_offset, packed_factor, marlin_tile_size
 ):
-    shard_size = shard_size // packed_factor
-    shard_offset = shard_offset // packed_factor
+    shard_size = round(shard_size // packed_factor)
+    shard_offset = round(shard_offset // packed_factor)
     if marlin_tile_size is not None:
         return _adjust_shard_indexes_for_marlin(
             shard_size=shard_size,
